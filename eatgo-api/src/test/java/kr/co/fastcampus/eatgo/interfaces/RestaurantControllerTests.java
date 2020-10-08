@@ -123,16 +123,85 @@ class RestaurantControllerTests {
     }
 
     @Test
-    public void create() throws Exception {
+    public void detailWithExisted() throws Exception {
+
+//        Restaurant restaurant1 = new Restaurant(1004L, "JOKER House", "Seoul");
+        Restaurant restaurant1 = Restaurant.builder()
+            .id(1004L)
+            .name("JOKER House")
+            .address("Seoul")
+            .build();
+        restaurant1.setMenuItems(
+            Arrays.asList(
+                MenuItem.builder()
+                    .name("KimChi")
+                    .build()
+            )
+        );
+
+//        restaurant1.addMenuItem(
+//                MenuItem.builder()
+//                    .name("KimChi")
+//                    .build()
+//        );
+        given(restaurantService.getRestaurantById(1004L)).willReturn(restaurant1);
+
+//        Restaurant restaurant2 = new Restaurant(2020L, "Cyber Food", "Seoul");
+        Restaurant restaurant2 = Restaurant.builder()
+            .id(2020L)
+            .name("Cyber Food")
+            .address("Seoul")
+            .build();
+        given(restaurantService.getRestaurantById(2020L)).willReturn(restaurant2);
+
+
+        mvc.perform(get("/restaurants/1004"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("\"id\":1004")
+            ))
+            .andExpect(content().string(
+                containsString("\"name\":\"JOKER House\"")
+            ))
+            .andExpect(content().string(
+                containsString("KimChi")
+            ));
+        mvc.perform(get("/restaurants/2020"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("\"id\":2020")
+            ))
+            .andExpect(content().string(
+                containsString("\"name\":\"Cyber Food\"")
+            ));
+    }
+
+    @Test
+    public void detailWithNotExisted() throws Exception {
+        given(restaurantService.getRestaurantById(404L))
+            .willThrow(new RestaurantNotFoundException());
+        mvc.perform(get("/restaurants/404"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void createWithValidData() throws Exception {
         //Restaurant restaurant = new Restaurant(1234L, "BeRyong", "Seoul");
 
+        given(restaurantService.addRestaurant(any())).will(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            return Restaurant.builder()
+                .address(restaurant.getAddress())
+                .id(restaurant.getId())
+                .name(restaurant.getName())
+                .build();
+        });
         mvc.perform(post("/restaurants")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"id\":1234, \"name\":\"BeRyong\", \"address\":\"Seoul\"}"))
             .andExpect(status().isCreated())
-            //.andExpect(header().string("location", "/restaurants/1234"))
-            .andExpect(content().string("{}"))
         ;
+
         // 실행 중심인 경우는 verify
         // verify(restaurantService).addRestaurantRepositoryImplTestsRestaurant(restaurant);
         // Mockito에서는 어느 데이터를 넣던 작동하는 any를 제공
@@ -140,12 +209,50 @@ class RestaurantControllerTests {
     }
 
     @Test
-    public void update() throws Exception {
+    public void createWithInvalidData() throws Exception {
+        given(restaurantService.addRestaurant(any())).will(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            return Restaurant.builder()
+                .address(restaurant.getAddress())
+                .id(restaurant.getId())
+                .name(restaurant.getName())
+                .build();
+        });
+        mvc.perform(post("/restaurants")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"id\":1234, \"name\":\"\", \"address\":\"\"}"))
+            .andExpect(status().isBadRequest())
+        ;
+        // 실행 중심인 경우는 verify
+        // verify(restaurantService).addRestaurantRepositoryImplTestsRestaurant(restaurant);
+        // Mockito에서는 어느 데이터를 넣던 작동하는 any를 제공
+    }
+
+    @Test
+    public void updateWithValidData() throws Exception {
 
         mvc.perform(patch("/restaurants/1004")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"name\":\"JOKER Bar\", \"address\":\"Busan\"}"))
             .andExpect(status().isOk());
         verify(restaurantService).updateRestaurant(1004L, "JOKER Bar", "Busan");
+    }
+
+    @Test
+    public void updateWithInvalidData() throws Exception {
+
+        mvc.perform(patch("/restaurants/1004")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"name\":\"\", \"address\":\"\"}"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateWithName() throws Exception {
+
+        mvc.perform(patch("/restaurants/1004")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"name\":\"\", \"address\":\"Busan\"}"))
+            .andExpect(status().isBadRequest());
     }
 }

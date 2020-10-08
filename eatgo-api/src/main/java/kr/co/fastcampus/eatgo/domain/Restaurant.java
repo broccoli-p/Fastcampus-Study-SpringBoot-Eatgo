@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,9 @@ public class Restaurant {
     @Setter
     private Long id;
     @Setter // 특정 속성 적용
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String address;
 //    private String regionName; // Korean
 //    private String categoryName; // Korean
