@@ -36,6 +36,10 @@ public class Restaurant {
     @JsonInclude(JsonInclude.Include.NON_NULL)// NULL이 아닌 경우에만 반환
     private List<MenuItem> menuItems;
 
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)// NULL이 아닌 경우에만 반환
+    private List<Review> reviews;
+
 //    public Restaurant() {
 //    }
 //    아래 내용을 적용하기 싫다면 @AllArgsConstructor
@@ -71,6 +75,10 @@ public class Restaurant {
         {
             this.menuItems.add(menuItem);
         }
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = new ArrayList<>(reviews);
     }
 
 //    public void setName(String name) {
