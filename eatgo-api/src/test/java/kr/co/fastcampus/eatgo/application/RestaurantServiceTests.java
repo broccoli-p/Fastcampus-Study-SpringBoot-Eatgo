@@ -1,6 +1,7 @@
 package kr.co.fastcampus.eatgo.application;
 
 import kr.co.fastcampus.eatgo.domain.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -61,7 +62,7 @@ class RestaurantServiceTests {
     }
 
     @Test
-    void getRestaurant() {
+    void getRestaurantWithExisted() {
         Restaurant restaurant = restaurantService.getRestaurantById(1004L);
         assertThat(restaurant.getId(), is(1004L));
         MenuItem menuItem = restaurant.getMenuItems().get(0);
@@ -69,11 +70,21 @@ class RestaurantServiceTests {
     }
 
     @Test
+    void getRestaurantWithNotExisted() {
+        // 아래 코드는 Junit4에서는 @Test(expected = RestaurantNotFoundException.class) 로 사용 가능
+        Assertions.assertThrows(RestaurantNotFoundException.class, () -> {
+           restaurantService.getRestaurantById(404L);
+        });
+    }
+
+
+    @Test
     void getRestaurants() {
         List<Restaurant> restaurants = restaurantService.getRestaurants();
         Restaurant restaurant = restaurants.get(0);
         assertThat(restaurant.getId(), is(1004L));
     }
+
 
     @Test
     void addRestaurant(){

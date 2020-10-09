@@ -2,6 +2,7 @@ package kr.co.fastcampus.eatgo.interfaces;
 
 import kr.co.fastcampus.eatgo.application.RestaurantService;
 import kr.co.fastcampus.eatgo.domain.Restaurant;
+import kr.co.fastcampus.eatgo.domain.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,11 @@ public class RestaurantController {
 
     @GetMapping("/restaurants/{id}")
     public Restaurant detail(@PathVariable("id") long id) {
-        Restaurant restaurant = restaurantService.getRestaurantById(id); // 아래 주석 부분이 들어가있는
+        //try {
+            Restaurant restaurant = restaurantService.getRestaurantById(id); // 아래 주석 부분이 들어가있는
+        //} catch(RestaurantNotFoundException exception) {
+            // TODO 처리할 수도 있고
+        //}
         return restaurant;
     }
 
@@ -47,10 +52,10 @@ public class RestaurantController {
 
         String name = resource.getName();
         String address = resource.getAddress();
-        long id = resource.getId();
+        //long id = resource.getId();
 
         Restaurant restaurant = Restaurant.builder()
-            .id(id)
+            //.id(id)
             .name(name)
             .address(address)
             .build();

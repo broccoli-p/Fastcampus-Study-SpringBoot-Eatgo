@@ -1,5 +1,6 @@
 package kr.co.fastcampus.eatgo.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -18,12 +19,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder // 빌드패턴 사용
 public class Restaurant {
-    @Id
-    @GeneratedValue
+    @Id  // Entity의 ID 지정
+    @GeneratedValue // 자동 생성
     @Setter
     private Long id;
     @Setter // 특정 속성 적용
-    @NotEmpty
+    @NotEmpty // NotEmpty Validation
     private String name;
     @NotEmpty
     private String address;
@@ -32,6 +33,7 @@ public class Restaurant {
 //    private String tagName; // #JMT
     // 디비 저장 처리를 하지 않음
     @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)// NULL이 아닌 경우에만 반환
     private List<MenuItem> menuItems;
 
 //    public Restaurant() {
