@@ -1,0 +1,29 @@
+<test>
+    <JDBCConnectionPool>
+        <username>
+            <password>
+
+            </password>
+            <password>
+
+            </password>
+            <password>
+
+            </password>
+            <password>
+
+            </password>
+            <password>
+
+            </password>
+            <password>
+
+            </password>
+
+            <password>
+
+            </password>
+        </username>
+    </JDBCConnectionPool>>
+
+</test>
