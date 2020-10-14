@@ -85,12 +85,6 @@ class RestaurantControllerTests {
             )
         );
 
-        Review review = Review.builder()
-            .name("JOKER")
-            .score(5)
-            .description("Great!")
-            .build();
-        restaurant1.setReviews(Arrays.asList(review));
 //        restaurant1.addMenuItem(
 //                MenuItem.builder()
 //                    .name("KimChi")
@@ -99,12 +93,12 @@ class RestaurantControllerTests {
         given(restaurantService.getRestaurantById(1004L)).willReturn(restaurant1);
 
 //        Restaurant restaurant2 = new Restaurant(2020L, "Cyber Food", "Seoul");
-//        Restaurant restaurant2 = Restaurant.builder()
-//            .id(2020L)
-//            .name("Cyber Food")
-//            .address("Seoul")
-//            .build();
-//        given(restaurantService.getRestaurantById(2020L)).willReturn(restaurant2);
+        Restaurant restaurant2 = Restaurant.builder()
+            .id(2020L)
+            .name("Cyber Food")
+            .address("Seoul")
+            .build();
+        given(restaurantService.getRestaurantById(2020L)).willReturn(restaurant2);
 
 
         mvc.perform(get("/restaurants/1004"))
@@ -117,17 +111,15 @@ class RestaurantControllerTests {
             ))
             .andExpect(content().string(
                 containsString("KimChi")
+            ));
+        mvc.perform(get("/restaurants/2020"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("\"id\":2020")
             ))
-            .andExpect(content().string(containsString("Great!")))
-        ;
-//        mvc.perform(get("/restaurants/2020"))
-//            .andExpect(status().isOk())
-//            .andExpect(content().string(
-//                containsString("\"id\":2020")
-//            ))
-//            .andExpect(content().string(
-//                containsString("\"name\":\"Cyber Food\"")
-//            ));
+            .andExpect(content().string(
+                containsString("\"name\":\"Cyber Food\"")
+            ));
     }
 
     @Test
@@ -161,7 +153,6 @@ class RestaurantControllerTests {
             .address("Seoul")
             .build();
         given(restaurantService.getRestaurantById(2020L)).willReturn(restaurant2);
-
 
 
         mvc.perform(get("/restaurants/1004"))
