@@ -6,22 +6,23 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantService {
 
     private RestaurantRepository restaurantRepository;
-//    private MenuItemRepository menuItemRepository;
-//    private ReviewRepository reviewRepository;
+    private MenuItemRepository menuItemRepository;
+    private ReviewRepository reviewRepository;
     public RestaurantService(RestaurantRepository restaurantRepository
-//        , MenuItemRepository menuItemRepository
-//        ,ReviewRepository reviewRepository
+        , MenuItemRepository menuItemRepository
+        ,ReviewRepository reviewRepository
     ) {
 
 
         this.restaurantRepository = restaurantRepository;
-//        this.menuItemRepository = menuItemRepository;
-//        this.reviewRepository = reviewRepository;
+        this.menuItemRepository = menuItemRepository;
+        this.reviewRepository = reviewRepository;
     }
 
 
@@ -51,6 +52,19 @@ public class RestaurantService {
 //        restaurant.setName(name);
 //        restaurant.setAddress(address);
         restaurant.updateInformation(name, address);
+
+        return restaurant;
+    }
+
+    public Restaurant getRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+            .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+
+        List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(restaurantId);
+        restaurant.setMenuItems(menuItems);
+
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(restaurantId);
+        restaurant.setReviews(reviews);
 
         return restaurant;
     }

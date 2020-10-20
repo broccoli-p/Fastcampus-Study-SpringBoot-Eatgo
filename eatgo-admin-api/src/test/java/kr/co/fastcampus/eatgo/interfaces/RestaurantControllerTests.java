@@ -84,7 +84,12 @@ class RestaurantControllerTests {
                     .build()
             )
         );
-
+//        Review review = Review.builder()
+//            .name("JOKER")
+//            .score(5)
+//            .description("Great!")
+//            .build();
+//        restaurant1.setReviews(Arrays.asList(review));
 //        restaurant1.addMenuItem(
 //                MenuItem.builder()
 //                    .name("KimChi")
@@ -117,6 +122,7 @@ class RestaurantControllerTests {
             .andExpect(content().string(
                 containsString("\"id\":2020")
             ))
+            //.andExpect(content().string(containsString("Great!")))
             .andExpect(content().string(
                 containsString("\"name\":\"Cyber Food\"")
             ));
@@ -131,13 +137,13 @@ class RestaurantControllerTests {
             .name("JOKER House")
             .address("Seoul")
             .build();
-        restaurant1.setMenuItems(
-            Arrays.asList(
-                MenuItem.builder()
-                    .name("KimChi")
-                    .build()
-            )
-        );
+//        restaurant1.setMenuItems(
+//            Arrays.asList(
+//                MenuItem.builder()
+//                    .name("KimChi")
+//                    .build()
+//            )
+//        );
 
 //        restaurant1.addMenuItem(
 //                MenuItem.builder()
@@ -163,9 +169,10 @@ class RestaurantControllerTests {
             .andExpect(content().string(
                 containsString("\"name\":\"JOKER House\"")
             ))
-            .andExpect(content().string(
-                containsString("KimChi")
-            ));
+//            .andExpect(content().string(
+//                containsString("KimChi")
+//            ))
+        ;
         mvc.perform(get("/restaurants/2020"))
             .andExpect(status().isOk())
             .andExpect(content().string(

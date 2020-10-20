@@ -11,10 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,13 +33,42 @@ class ReviewControllerTests {
     private ReviewService reviewService;
 
     @Test
-    public void list() throws Exception {
-        List<Review> reviews = new ArrayList<>();
-        reviews.add(Review.builder().description("Cool!").build());
-        given(reviewService.getReviews()).willReturn(reviews);
+    public void createWithValidAttributes() throws Exception {
+        given(reviewService.addReview(eq(1L), any())).willReturn(
+            Review.builder()
+                .id(1004L)
+                .name("JOKER")
+                .description("wow!!")
+                .build()
+        );
 
-        mvc.perform(get("/reviews"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Cool!")));
+        mvc.perform(post("/restaurants/1/reviews")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"name\":\"JOKER\",\"score\":3, \"description\":\"wow!!\"}"))
+            .andExpect(status().isCreated())
+            .andExpect(header().string("location", "/restaurants/1/reviews/1004"))
+        ;
+
+        verify(reviewService).addReview(eq(1L), any());
+    }
+
+    @Test
+    public void createWithInvalidAttributes() throws Exception {
+
+        given(reviewService.addReview(eq(1L), any())).willReturn(
+            Review.builder()
+                .id(123L)
+                .name("JOKER")
+                .description("wow!!")
+                .build()
+        );
+
+        mvc.perform(post("/restaurants/1/reviews")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{}"))
+            .andExpect(status().isBadRequest())
+        ;
+
+        verify(reviewService, never()).addReview(eq(1L), any());
     }
 }
