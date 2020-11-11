@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,23 +16,27 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor // 속성이 없는거에 대해 자동으로 생성
-// @Setter // 전체 적용
+@Setter // 전체 적용
 @AllArgsConstructor
 @Builder // 빌드패턴 사용
 public class Restaurant {
     @Id  // Entity의 ID 지정
     @GeneratedValue // 자동 생성
-    @Setter
     private Long id;
-    @Setter // 특정 속성 적용
+
+    @NotNull
+    private Long categoryId;
+
     @NotEmpty // NotEmpty Validation
     private String name;
+
     @NotEmpty
     private String address;
 //    private String regionName; // Korean
 //    private String categoryName; // Korean
 //    private String tagName; // #JMT
     // 디비 저장 처리를 하지 않음
+
     @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)// NULL이 아닌 경우에만 반환
     private List<MenuItem> menuItems;

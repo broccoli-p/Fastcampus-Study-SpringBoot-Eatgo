@@ -53,6 +53,7 @@ class RestaurantControllerTests {
         //restaurants.add(new Restaurant(1004L, "Bob zip", "Seoul"));
         restaurants.add(Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("Bob zip")
             .address("Seoul")
             .build());
@@ -74,6 +75,7 @@ class RestaurantControllerTests {
 //        Restaurant restaurant1 = new Restaurant(1004L, "JOKER House", "Seoul");
         Restaurant restaurant1 = Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("JOKER House")
             .address("Seoul")
             .build();
@@ -100,6 +102,7 @@ class RestaurantControllerTests {
 //        Restaurant restaurant2 = new Restaurant(2020L, "Cyber Food", "Seoul");
         Restaurant restaurant2 = Restaurant.builder()
             .id(2020L)
+            .categoryId(1L)
             .name("Cyber Food")
             .address("Seoul")
             .build();
@@ -134,6 +137,7 @@ class RestaurantControllerTests {
 //        Restaurant restaurant1 = new Restaurant(1004L, "JOKER House", "Seoul");
         Restaurant restaurant1 = Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("JOKER House")
             .address("Seoul")
             .build();
@@ -155,6 +159,7 @@ class RestaurantControllerTests {
 //        Restaurant restaurant2 = new Restaurant(2020L, "Cyber Food", "Seoul");
         Restaurant restaurant2 = Restaurant.builder()
             .id(2020L)
+            .categoryId(1L)
             .name("Cyber Food")
             .address("Seoul")
             .build();
@@ -202,12 +207,13 @@ class RestaurantControllerTests {
             return Restaurant.builder()
                 .address(restaurant.getAddress())
                 .id(restaurant.getId())
+                .categoryId(restaurant.getCategoryId())
                 .name(restaurant.getName())
                 .build();
         });
         mvc.perform(post("/restaurants")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"id\":1234, \"name\":\"BeRyong\", \"address\":\"Seoul\"}"))
+            .content("{\"id\":1234, \"name\":\"BeRyong\", \"address\":\"Seoul\", \"categoryId\":1}"))
             .andExpect(status().isCreated())
         ;
 
@@ -224,6 +230,7 @@ class RestaurantControllerTests {
             return Restaurant.builder()
                 .address(restaurant.getAddress())
                 .id(restaurant.getId())
+                .categoryId(restaurant.getCategoryId())
                 .name(restaurant.getName())
                 .build();
         });
@@ -242,7 +249,7 @@ class RestaurantControllerTests {
 
         mvc.perform(patch("/restaurants/1004")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"name\":\"JOKER Bar\", \"address\":\"Busan\"}"))
+            .content("{\"name\":\"JOKER Bar\", \"address\":\"Busan\", \"categoryId\":1}"))
             .andExpect(status().isOk());
         verify(restaurantService).updateRestaurant(1004L, "JOKER Bar", "Busan");
     }

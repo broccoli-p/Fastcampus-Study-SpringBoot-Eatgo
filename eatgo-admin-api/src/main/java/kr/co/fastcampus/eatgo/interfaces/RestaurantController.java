@@ -52,10 +52,12 @@ public class RestaurantController {
 
         String name = resource.getName();
         String address = resource.getAddress();
+        Long categoryId = resource.getCategoryId();
         //long id = resource.getId();
 
         Restaurant restaurant = Restaurant.builder()
             //.id(id)
+            .categoryId(categoryId)
             .name(name)
             .address(address)
             .build();

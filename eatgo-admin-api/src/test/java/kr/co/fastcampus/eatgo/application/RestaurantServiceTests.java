@@ -34,39 +34,40 @@ class RestaurantServiceTests {
         MockitoAnnotations.initMocks(this);
 
         mockRestaurantRepository();
-//        mockMenuItemRepository();
-//        mockReviewRepository();
-        // restaurantService = new RestaurantService(restaurantRepository, menuItemRepository, reviewRepository);
-        restaurantService = new RestaurantService(restaurantRepository);
+        mockMenuItemRepository();
+        mockReviewRepository();
+         restaurantService = new RestaurantService(restaurantRepository, menuItemRepository, reviewRepository);
+//        restaurantService = new RestaurantService(restaurantRepository);
 
     }
     // 가짜 객체를 이용해서 테스트 진행
-//    private void mockMenuItemRepository() {
-//        List<MenuItem> menuItems = new ArrayList<>();
-//        menuItems.add(
-//            MenuItem.builder()
-//            .name("KimChi")
-//            .build()
-//        );
-//        given(menuItemRepository.findAllByRestaurantId(1004L)).willReturn(menuItems);
-//    }
-//    private void mockReviewRepository() {
-//        List<Review> reviews = new ArrayList<>();
-//        reviews.add(
-//            Review.builder()
-//                .name("BeRyong")
-//                .score(1)
-//                .description("Bad")
-//                .build()
-//        );
-//        given(reviewRepository.findAllByRestaurantId(1004L)).willReturn(reviews);
-//    }
+    private void mockMenuItemRepository() {
+        List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(
+            MenuItem.builder()
+            .name("KimChi")
+            .build()
+        );
+        given(menuItemRepository.findAllByRestaurantId(1004L)).willReturn(menuItems);
+    }
+    private void mockReviewRepository() {
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(
+            Review.builder()
+                .name("BeRyong")
+                .score(1)
+                .description("Bad")
+                .build()
+        );
+        given(reviewRepository.findAllByRestaurantId(1004L)).willReturn(reviews);
+    }
 
     private void mockRestaurantRepository() {
         List<Restaurant> restaurants = new ArrayList<>();
 //        Restaurant restaurant = new Restaurant(1004L, "Bob zip", "Seoul");
         Restaurant restaurant = Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("Bob zip")
             .address("Seoul")
             .build();
@@ -120,11 +121,13 @@ class RestaurantServiceTests {
 
         Restaurant restaurant = Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("Bob zip")
             .address("Seoul")
             .build();
         Restaurant saved = Restaurant.builder()
             .id(1234L)
+            .categoryId(1L)
             .name("ByRyong")
             .address("Seoul")
             .build();
@@ -143,6 +146,7 @@ class RestaurantServiceTests {
         Restaurant restaurant = Restaurant.builder()
             .id(1004L)
             .name("Bob zip")
+            .categoryId(1L)
             .address("Seoul")
             .build();
         restaurantService.addRestaurant(restaurant);

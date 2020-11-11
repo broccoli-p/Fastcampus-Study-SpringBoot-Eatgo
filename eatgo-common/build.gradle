@@ -23,6 +23,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.h2database:h2'
+    implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
+
+    implementation 'junit:junit:4.12'
     compile group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

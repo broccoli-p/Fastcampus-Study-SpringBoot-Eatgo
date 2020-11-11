@@ -38,7 +38,7 @@ class MenuItemControllerTests {
     public void bulkUpdate() throws Exception {
         mvc.perform(patch("/restaurants/1/menuitems")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("[ ]"))
+            .content("[]"))
             .andExpect(status().isOk())
         ;
         verify(menuItemService).bulkUpdate(eq(1L), any());

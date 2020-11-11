@@ -11,27 +11,27 @@ import java.util.List;
 public class RestaurantService {
 
     private RestaurantRepository restaurantRepository;
-//    private MenuItemRepository menuItemRepository;
-//    private ReviewRepository reviewRepository;
+    private MenuItemRepository menuItemRepository;
+    private ReviewRepository reviewRepository;
     public RestaurantService(RestaurantRepository restaurantRepository
-//        , MenuItemRepository menuItemRepository
-//        ,ReviewRepository reviewRepository
+        , MenuItemRepository menuItemRepository
+        ,ReviewRepository reviewRepository
     ) {
 
 
         this.restaurantRepository = restaurantRepository;
-//        this.menuItemRepository = menuItemRepository;
-//        this.reviewRepository = reviewRepository;
+        this.menuItemRepository = menuItemRepository;
+        this.reviewRepository = reviewRepository;
     }
 
 
     public Restaurant getRestaurantById(long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
             .orElseThrow(() -> new RestaurantNotFoundException(id));
-//        List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(id);
-//        restaurant.setMenuItems(menuItems);
-//        List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
-//        restaurant.setMenuItems(reviews);
+        List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(id);
+        restaurant.setMenuItems(menuItems);
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
+        restaurant.setReviews(reviews);
         return restaurant;
     }
 

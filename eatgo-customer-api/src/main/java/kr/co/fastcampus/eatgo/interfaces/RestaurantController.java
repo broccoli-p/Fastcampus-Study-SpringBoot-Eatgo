@@ -2,15 +2,9 @@ package kr.co.fastcampus.eatgo.interfaces;
 
 import kr.co.fastcampus.eatgo.application.RestaurantService;
 import kr.co.fastcampus.eatgo.domain.Restaurant;
-import kr.co.fastcampus.eatgo.domain.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 // Controller 은 URL 맵핑에 사용된다.
@@ -31,8 +25,12 @@ public class RestaurantController {
 
 
     @GetMapping("/restaurants")
-    public List<Restaurant> list() {
-        List<Restaurant> restaurants = restaurantService.getRestaurants();
+    public List<Restaurant> list(
+        @RequestParam("region") String region,
+        @RequestParam("category") Long categoryId
+    ) {
+        //String region = "Seoul";
+        List<Restaurant> restaurants = restaurantService.getRestaurants(region, categoryId);
         return restaurants;
     }
 

@@ -24,7 +24,9 @@ dependencies {
     implementation project(':eatgo-common')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     implementation 'com.h2database:h2'
     compile group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
 
