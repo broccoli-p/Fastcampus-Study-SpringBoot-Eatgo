@@ -19,7 +19,7 @@ public class Review {
     @Id
     @GeneratedValue
     private Long id;
-    @NotEmpty
+
     private String name;
     @Min(0)
     @Max(5)

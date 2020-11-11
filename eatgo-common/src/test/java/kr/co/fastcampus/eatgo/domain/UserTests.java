@@ -22,4 +22,17 @@ class UserTests {
         user.deactivate();
         assertThat(user.isActive(), is(false));
     }
+
+    @Test
+    public void isRestaurantsOwner() {
+        User user = User.builder().level(1L).build();
+
+        assertThat(user.isRestaurantsOwner(), is(false));
+
+        user.setRestaurantId(1004L);
+
+        assertThat(user.isRestaurantsOwner(), is(true));
+        assertThat(user.getRestaurantId(), is(1004L));
+
+    }
 }

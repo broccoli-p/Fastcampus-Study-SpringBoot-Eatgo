@@ -14,9 +14,14 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
-    public Review addReview(Long restaurantId, Review review) {
-        review.setRestaurantId(restaurantId);
-        return reviewRepository.save(review);
+    public Review addReview(Long restaurantId, String name, Integer score, String description) {
+        return reviewRepository.save(Review.builder()
+            .restaurantId(restaurantId)
+            .name(name)
+            .score(score)
+            .description(description)
+            .build()
+        );
     }
 
 }

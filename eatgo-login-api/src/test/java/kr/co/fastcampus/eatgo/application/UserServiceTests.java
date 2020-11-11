@@ -8,11 +8,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -34,37 +31,46 @@ class UserServiceTests {
         this.userService = new UserService(userRepository, passwordEncoder);
     }
 
-    @Test
-    public void registerUser() {
-        String email = "tester@example.com";
-        String name = "Tester";
-        String password = "test";
-        Long level = 1L;
-        userService.registerUser(email, name, password, level);
 
-        verify(userRepository).save(any());
+    @Test
+    public void authenticateWithValidAttribute() {
+        String email = "tester@example.com";
+        String password = "test";
+
+        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
+
+        given(passwordEncoder.matches(any(), any())).willReturn(true);
+
+        Assertions.assertThrows(EmailNotExistedException.class,
+            ()-> {
+                userService.authenticate(email, password);
+            }
+        );
     }
 
     @Test
-    public void registerUserWithExistedEmail() {
-
+    public void authenticateWithWrongPassword() {
         String email = "tester@example.com";
         String name = "Tester";
-        String password = "test";
+        String password = "x";
         Long level = 1L;
+
+        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
         User mockUser = User.builder()
             .email(email)
             .password(password)
             .level(level)
             .build();
 
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUser));
+        given(userRepository.findByEmail(email))
+            .willReturn(Optional.of(mockUser));
 
-        Assertions.assertThrows(EmailExistedException.class,
+        given(passwordEncoder.matches(any(), any())).willReturn(false);
+
+        Assertions.assertThrows(PasswordWrongException.class,
             ()-> {
-                userService.registerUser(email, name, password, level);
+                userService.authenticate(email, password);
             }
         );
-        verify(userRepository, never()).save(any());
     }
 }
