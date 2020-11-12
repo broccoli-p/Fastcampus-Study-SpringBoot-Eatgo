@@ -1,8 +1,9 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
 import io.jsonwebtoken.Claims;
-import kr.co.fastcampus.eatgo.application.ReviewService;
-import kr.co.fastcampus.eatgo.domain.Review;
+import kr.co.fastcampus.eatgo.application.ReservationService;
+import kr.co.fastcampus.eatgo.domain.Reservation;
+import kr.co.fastcampus.eatgo.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,27 +17,32 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-public class ReviewController {
+public class ReservationController {
 
     @Autowired
-    private ReviewService reviewService;
+    ReservationService reservationService;
+    private JwtUtil jwtUtil;
 
-    @PostMapping("/restaurants/{restaurantId}/reviews")
+    @PostMapping("/restaurants/{restaurantId}/reservations")
     public ResponseEntity<?> create(
         Authentication authentication,
         @PathVariable("restaurantId") Long restaurantId,
-        @Valid @RequestBody Review resource
+        @Valid @RequestBody Reservation resource
     ) throws URISyntaxException {
 
-        Claims claims = (Claims)authentication.getPrincipal();
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long userId = claims.get("userId", Long.class);
         String name = claims.get("name", String.class);
 
-        Integer score = resource.getScore();
-        String description = resource.getDescription();
+        String date = resource.getDate();
+        String time = resource.getTime();
+        Integer partySize = resource.getPartySize();
+        Reservation reservation = reservationService.addReservation(
+            restaurantId, userId, name, date, time, partySize);
 
-        Review review = reviewService.addReview(restaurantId, name, score, description);
-        String url = "/restaurants/" + restaurantId +
-            "/reviews/" + review.getId();
+        String url = "/restaurants/"+restaurantId+"/reservations/1";
         return ResponseEntity.created(new URI(url)).body("{}");
+
     }
 }
